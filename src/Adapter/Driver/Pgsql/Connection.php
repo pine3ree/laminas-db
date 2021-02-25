@@ -28,6 +28,11 @@ class Connection extends AbstractConnection
      */
     protected $type = null;
 
+    protected const TYPES = [
+        PGSQL_CONNECT_FORCE_NEW,
+        PGSQL_CONNECT_ASYNC,
+    ];
+
     /**
      * Constructor
      *
@@ -75,14 +80,7 @@ class Connection extends AbstractConnection
      */
     public function setType($type)
     {
-        $invalidConectionType = ($type !== PGSQL_CONNECT_FORCE_NEW);
-
-        // Compatibility with PHP < 5.6
-        if ($invalidConectionType && defined('PGSQL_CONNECT_ASYNC')) {
-            $invalidConectionType = ($type !== PGSQL_CONNECT_ASYNC);
-        }
-
-        if ($invalidConectionType) {
+        if (! in_array($type, self::TYPES, true)) {
             throw new Exception\InvalidArgumentException(
                 'Connection type is not valid. (See: http://php.net/manual/en/function.pg-connect.php)'
             );
