@@ -135,7 +135,12 @@ class ConnectionTest extends TestCase
         if (! extension_loaded('pgsql')) {
             $this->markTestSkipped('pgsql extension not loaded');
         }
+
         $type = PGSQL_CONNECT_FORCE_NEW;
+        $this->connection->setType($type);
+        self::assertEquals($type, self::readAttribute($this->connection, 'type'));
+
+        $type = PGSQL_CONNECT_ASYNC;
         $this->connection->setType($type);
         self::assertEquals($type, self::readAttribute($this->connection, 'type'));
     }
